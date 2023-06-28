@@ -12,6 +12,17 @@ class BachelorsMaster extends StatefulWidget {
 
 class _BachelorsMasterState extends State<BachelorsMaster> {
   List<Bachelor> bachelors = data.initBachelors();
+  List<Bachelor> bachelorsLikes = [];
+
+  void like(Bachelor bachelor) {
+    setState(() {
+      if (bachelorsLikes.contains(bachelor)) {
+        bachelorsLikes.remove(bachelor);
+      } else {
+        bachelorsLikes.add(bachelor);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +37,8 @@ class _BachelorsMasterState extends State<BachelorsMaster> {
           final bachelor = bachelors[index];
           return BachelorsPreview(
             bachelor: bachelor,
+            like: () => like(bachelor),
+            bachelorsLikes: bachelorsLikes.contains(bachelor),
           );
         },
       ),

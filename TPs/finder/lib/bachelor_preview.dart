@@ -3,9 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:finder/bachelors_detail.dart';
 
 class BachelorsPreview extends StatelessWidget {
-  const BachelorsPreview({Key? key, required this.bachelor}) : super(key: key);
+  const BachelorsPreview(
+      {Key? key,
+      required this.bachelor,
+      required this.bachelorsLikes,
+      required this.like})
+      : super(key: key);
 
   final Bachelor bachelor;
+  final bool bachelorsLikes;
+  final VoidCallback like;
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -21,7 +29,8 @@ class BachelorsPreview extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BachelorsDetails(bachelor: bachelor),
+            builder: (context) => BachelorsDetails(
+                bachelor: bachelor, like: like, bachelorsLikes: bachelorsLikes),
           ),
         );
       },
