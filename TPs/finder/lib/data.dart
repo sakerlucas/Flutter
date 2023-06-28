@@ -22,6 +22,19 @@ List<Bachelor> initBachelors() {
 
     bachelors.add(Bachelor(firstName, faker.person.lastName(), gender, image));
   }
+  bachelors.shuffle();
+  bachelors.shuffle();
+  bachelors.shuffle();
+  bachelors.shuffle();
+  bachelors.shuffle();
+  bachelors.shuffle();
+  bachelors.shuffle();
+  bachelors.shuffle();
+  bachelors.shuffle();
+  bachelors.shuffle();
+  bachelors.shuffle();
+  bachelors.shuffle();
+  bachelors.shuffle();
   return bachelors;
 }
 
