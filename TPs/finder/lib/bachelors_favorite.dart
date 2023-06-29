@@ -1,5 +1,8 @@
+import 'package:finder/bachelor_preview.dart';
+import 'package:finder/bachelors_favorite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class BachelorsFavorite extends StatefulWidget {
   const BachelorsFavorite({Key? key}) : super(key: key);
@@ -24,8 +27,29 @@ class _BachelorsFavoriteState extends State<BachelorsFavorite> {
           ),
         ],
       ),
-      body: const Center(
-        child: Text('Favorites'),
+      body: ListView.builder(
+        itemCount:
+            context.watch<BachelorsFavoriteProvider>().bachelorsFavorite.length,
+        itemBuilder: (context, index) {
+          final bachelor = context
+              .watch<BachelorsFavoriteProvider>()
+              .bachelorsFavorite[index];
+          return Column(
+            children: [
+              BachelorsPreview(
+                bachelor: bachelor,
+              ),
+              //add button to remove from favorite
+              IconButton(
+                onPressed: () {
+                  context.read<BachelorsFavoriteProvider>().remove(bachelor);
+                },
+                icon: const Icon(Icons.delete),
+              ),
+              const Divider(),
+            ],
+          );
+        },
       ),
     );
   }

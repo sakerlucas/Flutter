@@ -1,35 +1,34 @@
+import 'package:finder/bachelors_favorite_provider.dart';
 import 'package:finder/models/bachelor.dart';
 import 'package:flutter/material.dart';
+//import provider
+import 'package:provider/provider.dart';
 
 class BachelorsDetails extends StatefulWidget {
-  const BachelorsDetails(
-      {Key? key,
-      required this.bachelor,
-      required this.bachelorsLikes,
-      required this.like})
-      : super(key: key);
+  const BachelorsDetails({
+    Key? key,
+    required this.bachelor,
+  }) : super(key: key);
 
   final Bachelor bachelor;
-  final bool bachelorsLikes;
-  final VoidCallback like;
 
   @override
-  _BachelorsDetail createState() =>
-      _BachelorsDetail(bachelor, like, bachelorsLikes);
+  _BachelorsDetail createState() => _BachelorsDetail(
+        bachelor,
+      );
 }
 
 class _BachelorsDetail extends State<BachelorsDetails> {
-  _BachelorsDetail(this.bachelor, this.like, this.bachelorsLikes);
+  _BachelorsDetail(this.bachelor);
 
   final Bachelor bachelor;
-  final bool bachelorsLikes;
-  final VoidCallback like;
   bool? _isFavorite;
+  late bool? _isInFavoriteList;
 
   void _toggleFavorite() {
     setState(() {
       if (_isFavorite == null) {
-        _isFavorite = !bachelorsLikes;
+        _isFavorite = !_isInFavoriteList!;
       } else {
         _isFavorite = !_isFavorite!;
       }
@@ -38,7 +37,7 @@ class _BachelorsDetail extends State<BachelorsDetails> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          (_isFavorite == null && bachelorsLikes || _isFavorite == true)
+          (_isFavorite == null && _isInFavoriteList! || _isFavorite == true)
               ? 'Vous avez ajouté ${bachelor.firstName} ${bachelor.lastName} à vos favoris'
               : 'Vous avez retiré ${bachelor.firstName} ${bachelor.lastName} de vos favoris',
         ),
@@ -46,11 +45,17 @@ class _BachelorsDetail extends State<BachelorsDetails> {
       ),
     );
 
-    like();
+    if (_isFavorite == null && _isInFavoriteList! || _isFavorite == true) {
+      context.read<BachelorsFavoriteProvider>().add(bachelor);
+    } else {
+      context.read<BachelorsFavoriteProvider>().remove(bachelor);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    _isInFavoriteList =
+        context.watch<BachelorsFavoriteProvider>().contains(bachelor);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber,
@@ -66,14 +71,14 @@ class _BachelorsDetail extends State<BachelorsDetails> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: (_isFavorite == null && bachelorsLikes ||
+                color: (_isFavorite == null && _isInFavoriteList! ||
                         _isFavorite == true)
                     ? Colors.red
                     //sinon si gender est male alors colors blue sinon pink
                     : bachelor.gender == Gender.male
                         ? const Color.fromARGB(255, 168, 245, 255)
                         : const Color.fromARGB(255, 255, 189, 211),
-                width: (_isFavorite == null && bachelorsLikes ||
+                width: (_isFavorite == null && _isInFavoriteList! ||
                         _isFavorite == true)
                     ? 5
                     : 2,
@@ -108,13 +113,13 @@ class _BachelorsDetail extends State<BachelorsDetails> {
           ),
           IconButton(
             icon: Icon(
-              (_isFavorite == null && bachelorsLikes || _isFavorite == true)
+              (_isFavorite == null && _isInFavoriteList! || _isFavorite == true)
                   ? Icons.favorite
                   : Icons.favorite_border,
-              color:
-                  (_isFavorite == null && bachelorsLikes || _isFavorite == true)
-                      ? Colors.red
-                      : null,
+              color: (_isFavorite == null && _isInFavoriteList! ||
+                      _isFavorite == true)
+                  ? Colors.red
+                  : null,
             ),
             iconSize: 40,
             onPressed: () {

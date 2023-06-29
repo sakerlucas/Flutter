@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  MyApp({
+    super.key,
+  });
 
   final _router = GoRouter(
     routes: [

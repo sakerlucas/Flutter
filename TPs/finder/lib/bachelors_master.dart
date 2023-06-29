@@ -1,8 +1,10 @@
+// import 'package:finder/bachelors_favorite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:finder/data.dart' as data;
 import 'package:finder/models/bachelor.dart';
 import 'package:finder/bachelor_preview.dart';
 import 'package:go_router/go_router.dart';
+// import 'package:provider/provider.dart';
 
 class BachelorsMaster extends StatefulWidget {
   const BachelorsMaster({super.key});
@@ -13,17 +15,6 @@ class BachelorsMaster extends StatefulWidget {
 
 class _BachelorsMasterState extends State<BachelorsMaster> {
   List<Bachelor> bachelors = data.initBachelors();
-  List<Bachelor> bachelorsLikes = [];
-
-  void like(Bachelor bachelor) {
-    setState(() {
-      if (bachelorsLikes.contains(bachelor)) {
-        bachelorsLikes.remove(bachelor);
-      } else {
-        bachelorsLikes.add(bachelor);
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +37,6 @@ class _BachelorsMasterState extends State<BachelorsMaster> {
           final bachelor = bachelors[index];
           return BachelorsPreview(
             bachelor: bachelor,
-            like: () => like(bachelor),
-            bachelorsLikes: bachelorsLikes.contains(bachelor),
           );
         },
       ),
