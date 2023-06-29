@@ -23,6 +23,7 @@ class _BachelorsDetail extends State<BachelorsDetails> {
 
   final Bachelor bachelor;
   bool? _isFavorite;
+  bool? _isDislike;
   late bool? _isInFavoriteList;
 
   void _toggleFavorite() {
@@ -50,6 +51,27 @@ class _BachelorsDetail extends State<BachelorsDetails> {
     } else {
       context.read<BachelorsFavoriteProvider>().remove(bachelor);
     }
+  }
+
+  void _toggleDislike() {
+    setState(() {
+      if (_isDislike == null) {
+        _isDislike = !_isInFavoriteList!;
+      } else {
+        _isDislike = !_isDislike!;
+      }
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          (_isDislike == null && _isInFavoriteList! || _isDislike == true)
+              ? 'Vous avez masqué ${bachelor.firstName} ${bachelor.lastName} à votre liste'
+              : 'Vous avez rajouté ${bachelor.firstName} ${bachelor.lastName} à votre liste',
+        ),
+        duration: const Duration(seconds: 1),
+      ),
+    );
   }
 
   @override
@@ -111,21 +133,55 @@ class _BachelorsDetail extends State<BachelorsDetails> {
             ),
             subtitle: Text(bachelor.description ?? 'No description'),
           ),
-          IconButton(
-            icon: Icon(
-              (_isFavorite == null && _isInFavoriteList! || _isFavorite == true)
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-              color: (_isFavorite == null && _isInFavoriteList! ||
-                      _isFavorite == true)
-                  ? Colors.red
-                  : null,
-            ),
-            iconSize: 40,
-            onPressed: () {
-              _toggleFavorite();
-            },
-          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: Icon(
+                  (_isFavorite == null && _isInFavoriteList! ||
+                          _isFavorite == true)
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  color: (_isFavorite == null && _isInFavoriteList! ||
+                          _isFavorite == true)
+                      ? Colors.red
+                      : null,
+                ),
+                iconSize: 40,
+                onPressed: () {
+                  _toggleFavorite();
+                },
+              ),
+              IconButton(
+                icon: Icon(
+                  (_isDislike == null && _isInFavoriteList! ||
+                          _isDislike == true)
+                      ? Icons.heart_broken
+                      : Icons.heart_broken_outlined,
+                ),
+                iconSize: 40,
+                onPressed: () {
+                  _toggleDislike();
+                },
+              ),
+            ],
+          )
+
+          // IconButton(
+          //   icon: Icon(
+          //     (_isFavorite == null && _isInFavoriteList! || _isFavorite == true)
+          //         ? Icons.favorite
+          //         : Icons.favorite_border,
+          //     color: (_isFavorite == null && _isInFavoriteList! ||
+          //             _isFavorite == true)
+          //         ? Colors.red
+          //         : null,
+          //   ),
+          //   iconSize: 40,
+          //   onPressed: () {
+          //     _toggleFavorite();
+          //   },
+          // ),
         ],
       ),
     );
