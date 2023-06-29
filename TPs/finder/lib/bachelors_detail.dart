@@ -33,20 +33,20 @@ class _BachelorsDetail extends State<BachelorsDetails> {
       } else {
         _isFavorite = !_isFavorite!;
       }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            (_isFavorite == null && bachelorsLikes || _isFavorite == true)
-                ? 'Vous avez ajouté ${bachelor.firstName} ${bachelor.lastName} à vos favoris'
-                : 'Vous avez retiré ${bachelor.firstName} ${bachelor.lastName} de vos favoris',
-          ),
-          duration: const Duration(seconds: 1),
-        ),
-      );
-
-      like();
     });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          (_isFavorite == null && bachelorsLikes || _isFavorite == true)
+              ? 'Vous avez ajouté ${bachelor.firstName} ${bachelor.lastName} à vos favoris'
+              : 'Vous avez retiré ${bachelor.firstName} ${bachelor.lastName} de vos favoris',
+        ),
+        duration: const Duration(seconds: 1),
+      ),
+    );
+
+    like();
   }
 
   @override
