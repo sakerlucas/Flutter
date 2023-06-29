@@ -53,7 +53,7 @@ class _BachelorsDetail extends State<BachelorsDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Colors.amber,
         title: const Text('Finder'),
       ),
       body: Column(
@@ -69,7 +69,10 @@ class _BachelorsDetail extends State<BachelorsDetails> {
                 color: (_isFavorite == null && bachelorsLikes ||
                         _isFavorite == true)
                     ? Colors.red
-                    : Theme.of(context).colorScheme.secondary,
+                    //sinon si gender est male alors colors blue sinon pink
+                    : bachelor.gender == Gender.male
+                        ? const Color.fromARGB(255, 168, 245, 255)
+                        : const Color.fromARGB(255, 255, 189, 211),
                 width: (_isFavorite == null && bachelorsLikes ||
                         _isFavorite == true)
                     ? 5

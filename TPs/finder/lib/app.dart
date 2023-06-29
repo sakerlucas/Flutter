@@ -1,18 +1,32 @@
+import 'package:finder/bachelors_favorite.dart';
 import 'package:finder/bachelors_master.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final _router = GoRouter(
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const BachelorsMaster(),
+      ),
+      GoRoute(
+        path: '/favorites',
+        builder: (context, state) => const BachelorsFavorite(),
+      ),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Finder',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: const BachelorsMaster(),
+      routerConfig: _router,
     );
   }
 }
