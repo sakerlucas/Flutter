@@ -3,7 +3,7 @@ import 'package:finder/data.dart' as data;
 import 'package:finder/models/bachelor.dart';
 
 class BachelorsProvider extends ChangeNotifier {
-  final List<Bachelor> _bachelors = data.initBachelors();
+  late List<Bachelor> _bachelors = data.initBachelors();
 
   List<Bachelor> get bachelors => List.unmodifiable(_bachelors);
 
@@ -13,5 +13,10 @@ class BachelorsProvider extends ChangeNotifier {
     return _bachelors.map((e) => e.id).toList().toString();
   }
 
-  void search(String searchValue) {}
+  void search(String searchValue) {
+    _bachelors = data
+        .initBachelors()
+        .where((element) => element.firstName.contains(searchValue))
+        .toList();
+  }
 }

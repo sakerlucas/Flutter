@@ -18,14 +18,16 @@ class _BachelorsMasterState extends State<BachelorsMaster> {
   final fieldText = TextEditingController();
   String searchValue = '';
 
-  void research() {
-    context.read<BachelorsProvider>().search(searchValue);
+  void research(String bachelorName) {
+    context.read<BachelorsProvider>().search(bachelorName);
+    //update the list of bachelors
+    setState(() {});
   }
 
   void clearText() {
     fieldText.clear();
     searchValue = '';
-    research();
+    research(searchValue);
   }
 
   @override
@@ -51,10 +53,10 @@ class _BachelorsMasterState extends State<BachelorsMaster> {
                 controller: fieldText,
                 onChanged: (value) {
                   searchValue = value;
-                  research();
+                  research(searchValue);
                 },
                 decoration: InputDecoration(
-                  labelText: 'Search',
+                  labelText: 'Search bachelor',
                   prefixIcon: const Icon(Icons.search),
                   suffixIcon: IconButton(
                       onPressed: () {
