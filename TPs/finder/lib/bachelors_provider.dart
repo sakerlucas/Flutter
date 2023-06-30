@@ -12,4 +12,6 @@ class BachelorsProvider extends ChangeNotifier {
     // TODO: return ids of bachelors
     return _bachelors.map((e) => e.id).toList().toString();
   }
+
+  void search(String searchValue) {}
 }

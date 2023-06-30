@@ -15,6 +15,18 @@ class BachelorsMaster extends StatefulWidget {
 
 class _BachelorsMasterState extends State<BachelorsMaster> {
   Gender? gender = Gender.all;
+  final fieldText = TextEditingController();
+  String searchValue = '';
+
+  void research() {
+    context.read<BachelorsProvider>().search(searchValue);
+  }
+
+  void clearText() {
+    fieldText.clear();
+    searchValue = '';
+    research();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,79 +43,106 @@ class _BachelorsMasterState extends State<BachelorsMaster> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          ListTile(
-            title: const Text('All'),
-            leading: Radio<Gender>(
-              value: Gender.all,
-              groupValue: gender,
-              onChanged: (Gender? value) {
-                setState(() {
-                  gender = value;
-                });
-              },
-            ),
-          ),
-          ListTile(
-            title: const Text('Males'),
-            leading: Radio<Gender>(
-              value: Gender.male,
-              groupValue: gender,
-              onChanged: (Gender? value) {
-                setState(() {
-                  gender = value;
-                });
-              },
-            ),
-          ),
-          ListTile(
-            title: const Text('Females'),
-            leading: Radio<Gender>(
-              value: Gender.female,
-              groupValue: gender,
-              onChanged: (Gender? value) {
-                setState(() {
-                  gender = value;
-                });
-              },
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: context
-                  .watch<BachelorsProvider>()
-                  .bachelors
-                  .where(
-                    (bachelor) =>
-                        (bachelor.gender == gender || gender == Gender.all),
-                  )
-                  .length,
-              itemBuilder: (context, index) {
-                //recupere le bachelor a l'index avec le gender selectionné
-                final Bachelor bachelor = context
-                    .read<BachelorsProvider>()
-                    .bachelors
-                    .where((bachelor) =>
-                        (bachelor.gender == gender || gender == Gender.all))
-                    .toList()[index];
-
-                final search = context
-                    .read<BachelorsUnlikeProvider>()
-                    .bachelorsUnlike
-                    .where((element) => element.id == bachelor.id)
-                    .toList();
-
-                return search.isEmpty
-                    ? BachelorsPreview(
-                        bachelor: bachelor,
+      body: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
+              TextField(
+                controller: fieldText,
+                onChanged: (value) {
+                  searchValue = value;
+                  research();
+                },
+                decoration: InputDecoration(
+                  labelText: 'Search',
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: IconButton(
+                      onPressed: () {
+                        clearText();
+                      },
+                      icon: const Icon(Icons.delete)),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(25),
+                    ),
+                  ),
+                ),
+              ),
+              Column(
+                children: [
+                  ListTile(
+                    title: const Text('All'),
+                    leading: Radio<Gender>(
+                      value: Gender.all,
+                      groupValue: gender,
+                      onChanged: (Gender? value) {
+                        setState(() {
+                          gender = value;
+                        });
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Males'),
+                    leading: Radio<Gender>(
+                      value: Gender.male,
+                      groupValue: gender,
+                      onChanged: (Gender? value) {
+                        setState(() {
+                          gender = value;
+                        });
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Females'),
+                    leading: Radio<Gender>(
+                      value: Gender.female,
+                      groupValue: gender,
+                      onChanged: (Gender? value) {
+                        setState(() {
+                          gender = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: context
+                      .watch<BachelorsProvider>()
+                      .bachelors
+                      .where(
+                        (bachelor) =>
+                            (bachelor.gender == gender || gender == Gender.all),
                       )
-                    : Container();
-              },
-            ),
-          ),
-        ],
-      ),
+                      .length,
+                  itemBuilder: (context, index) {
+                    //recupere le bachelor a l'index avec le gender selectionné
+                    final Bachelor bachelor = context
+                        .read<BachelorsProvider>()
+                        .bachelors
+                        .where((bachelor) =>
+                            (bachelor.gender == gender || gender == Gender.all))
+                        .toList()[index];
+
+                    final search = context
+                        .read<BachelorsUnlikeProvider>()
+                        .bachelorsUnlike
+                        .where((element) => element.id == bachelor.id)
+                        .toList();
+
+                    return search.isEmpty
+                        ? BachelorsPreview(
+                            bachelor: bachelor,
+                          )
+                        : Container();
+                  },
+                ),
+              ),
+            ],
+          )),
     );
   }
 }
