@@ -1,10 +1,9 @@
-// import 'package:finder/bachelors_favorite_provider.dart';
+import 'package:finder/bachelors_unlike_provider.dart';
+import 'package:finder/bachelors_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:finder/data.dart' as data;
-import 'package:finder/models/bachelor.dart';
 import 'package:finder/bachelor_preview.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 
 class BachelorsMaster extends StatefulWidget {
   const BachelorsMaster({super.key});
@@ -14,8 +13,6 @@ class BachelorsMaster extends StatefulWidget {
 }
 
 class _BachelorsMasterState extends State<BachelorsMaster> {
-  List<Bachelor> bachelors = data.initBachelors();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,12 +29,21 @@ class _BachelorsMasterState extends State<BachelorsMaster> {
         ],
       ),
       body: ListView.builder(
-        itemCount: bachelors.length,
+        itemCount: context.watch<BachelorsProvider>().bachelors.length,
         itemBuilder: (context, index) {
-          final bachelor = bachelors[index];
-          return BachelorsPreview(
-            bachelor: bachelor,
-          );
+          final bachelor = context.watch<BachelorsProvider>().bachelors[index];
+
+          final search = context
+              .read<BachelorsUnlikeProvider>()
+              .bachelorsUnlike
+              .where((element) => element.id == bachelor.id)
+              .toList();
+
+          return search.isEmpty
+              ? BachelorsPreview(
+                  bachelor: bachelor,
+                )
+              : Container();
         },
       ),
     );

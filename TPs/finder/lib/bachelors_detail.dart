@@ -1,21 +1,22 @@
 import 'package:finder/bachelors_favorite_provider.dart';
+import 'package:finder/bachelors_unlike_provider.dart';
+import 'package:finder/bachelors_provider.dart';
 import 'package:finder/models/bachelor.dart';
 import 'package:flutter/material.dart';
-//import provider
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class BachelorsDetails extends StatefulWidget {
   const BachelorsDetails({
     Key? key,
+    //params in the route
     required this.bachelor,
   }) : super(key: key);
 
   final Bachelor bachelor;
 
   @override
-  _BachelorsDetail createState() => _BachelorsDetail(
-        bachelor,
-      );
+  _BachelorsDetail createState() => _BachelorsDetail(bachelor);
 }
 
 class _BachelorsDetail extends State<BachelorsDetails> {
@@ -25,6 +26,7 @@ class _BachelorsDetail extends State<BachelorsDetails> {
   bool? _isFavorite;
   bool? _isDislike;
   late bool? _isInFavoriteList;
+  late bool? _isInUnlikeList;
 
   void _toggleFavorite() {
     setState(() {
@@ -56,7 +58,7 @@ class _BachelorsDetail extends State<BachelorsDetails> {
   void _toggleDislike() {
     setState(() {
       if (_isDislike == null) {
-        _isDislike = !_isInFavoriteList!;
+        _isDislike = !_isInUnlikeList!;
       } else {
         _isDislike = !_isDislike!;
       }
@@ -65,23 +67,43 @@ class _BachelorsDetail extends State<BachelorsDetails> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          (_isDislike == null && _isInFavoriteList! || _isDislike == true)
+          (_isDislike == null && _isInUnlikeList! || _isDislike == true)
               ? 'Vous avez masqué ${bachelor.firstName} ${bachelor.lastName} à votre liste'
               : 'Vous avez rajouté ${bachelor.firstName} ${bachelor.lastName} à votre liste',
         ),
         duration: const Duration(seconds: 1),
       ),
     );
+
+    if (_isDislike == null && _isInUnlikeList! || _isDislike == true) {
+      //context.read<BachelorsUnlikeProvider>().add(bachelor);
+      Provider.of<BachelorsUnlikeProvider>(context, listen: false)
+          .add(bachelor);
+    } else {
+      //context.read<BachelorsUnlikeProvider>().remove(bachelor);
+      Provider.of<BachelorsUnlikeProvider>(context, listen: false)
+          .remove(bachelor);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     _isInFavoriteList =
         context.watch<BachelorsFavoriteProvider>().contains(bachelor);
+    _isInUnlikeList =
+        context.watch<BachelorsUnlikeProvider>().contains(bachelor);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber,
         title: const Text('Finder'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.go('/');
+            },
+            icon: const Icon(Icons.home),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -154,8 +176,7 @@ class _BachelorsDetail extends State<BachelorsDetails> {
               ),
               IconButton(
                 icon: Icon(
-                  (_isDislike == null && _isInFavoriteList! ||
-                          _isDislike == true)
+                  (_isDislike == null && _isInUnlikeList! || _isDislike == true)
                       ? Icons.heart_broken
                       : Icons.heart_broken_outlined,
                 ),
@@ -166,22 +187,6 @@ class _BachelorsDetail extends State<BachelorsDetails> {
               ),
             ],
           )
-
-          // IconButton(
-          //   icon: Icon(
-          //     (_isFavorite == null && _isInFavoriteList! || _isFavorite == true)
-          //         ? Icons.favorite
-          //         : Icons.favorite_border,
-          //     color: (_isFavorite == null && _isInFavoriteList! ||
-          //             _isFavorite == true)
-          //         ? Colors.red
-          //         : null,
-          //   ),
-          //   iconSize: 40,
-          //   onPressed: () {
-          //     _toggleFavorite();
-          //   },
-          // ),
         ],
       ),
     );

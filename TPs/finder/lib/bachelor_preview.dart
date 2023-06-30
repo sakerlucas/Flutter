@@ -1,6 +1,7 @@
 import 'package:finder/models/bachelor.dart';
 import 'package:flutter/material.dart';
 import 'package:finder/bachelors_detail.dart';
+import 'package:go_router/go_router.dart';
 
 class BachelorsPreview extends StatelessWidget {
   const BachelorsPreview({
@@ -23,12 +24,7 @@ class BachelorsPreview extends StatelessWidget {
       subtitle: Text(bachelor.lastName),
       trailing: const Icon(Icons.chevron_right),
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BachelorsDetails(bachelor: bachelor),
-          ),
-        );
+        context.go('/bachelor/${bachelor.id}');
       },
     );
   }

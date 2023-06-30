@@ -1,5 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:finder/models/bachelor.dart';
+import 'package:uuid/uuid.dart';
+import 'package:uuid/uuid_util.dart';
 
 List<Bachelor> initBachelors() {
   List<Bachelor> bachelors = [];
@@ -7,6 +9,7 @@ List<Bachelor> initBachelors() {
     String firstName;
     Gender gender;
     String image;
+    String id = const Uuid().v4(options: {'rng': UuidUtil.cryptoRNG});
 
     if (i < 15) {
       firstName = maleFirstNames[i];
@@ -20,7 +23,8 @@ List<Bachelor> initBachelors() {
       // print(image);
     }
 
-    bachelors.add(Bachelor(firstName, faker.person.lastName(), gender, image));
+    bachelors
+        .add(Bachelor(firstName, faker.person.lastName(), id, gender, image));
   }
   bachelors.shuffle();
   bachelors.shuffle();
