@@ -17,4 +17,4 @@ class Bachelor {
   }
 }
 
-enum Gender { male, female }
+enum Gender { all, male, female }
