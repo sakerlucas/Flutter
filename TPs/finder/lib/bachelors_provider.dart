@@ -14,8 +14,7 @@ class BachelorsProvider extends ChangeNotifier {
   }
 
   void search(String searchValue) {
-    _bachelors = data
-        .initBachelors()
+    _bachelors = _bachelors
         .where((element) => element.firstName.contains(searchValue))
         .toList();
   }

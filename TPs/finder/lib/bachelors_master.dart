@@ -19,16 +19,13 @@ class _BachelorsMasterState extends State<BachelorsMaster> {
   String searchValue = '';
 
   void research(String bachelorName) {
+    setState(() {
+      searchValue = bachelorName;
+    });
     context.read<BachelorsProvider>().search(bachelorName);
-    //update the list of bachelors
-    setState(() {});
   }
 
-  void clearText() {
-    fieldText.clear();
-    searchValue = '';
-    research(searchValue);
-  }
+  void clearText() {}
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +49,6 @@ class _BachelorsMasterState extends State<BachelorsMaster> {
               TextField(
                 controller: fieldText,
                 onChanged: (value) {
-                  searchValue = value;
                   research(searchValue);
                 },
                 decoration: InputDecoration(
@@ -121,7 +117,6 @@ class _BachelorsMasterState extends State<BachelorsMaster> {
                       )
                       .length,
                   itemBuilder: (context, index) {
-                    //recupere le bachelor a l'index avec le gender selectionné
                     final Bachelor bachelor = context
                         .read<BachelorsProvider>()
                         .bachelors
